@@ -1,0 +1,13 @@
+{
+  "name": "stitch-tienda-dulces-navidenos-artesanales",
+  "version": "1.0.0",
+  "description": "La Flor de la Canela - Obrador Tradicional 1890",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx -y serve . -p 3000",
+    "start": "npx -y serve . -p 3000"
+  },
+  "keywords": ["dulces", "navidad", "mantecados", "polvorones", "obrador"],
+  "author": "La Flor de la Canela",
+  "license": "ISC"
+}
