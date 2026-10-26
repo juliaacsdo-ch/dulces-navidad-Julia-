@@ -15,38 +15,590 @@
   <!-- CSS & Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "primary": "#5a0012",
-            "primary-container": "#7d1424",
-            "on-primary": "#ffffff",
-            "secondary": "#735c00",
-            "secondary-fixed": "#ffe088",
-            "on-secondary-fixed": "#241a00",
-            "surface": "#fdf9f3",
-            "surface-container-lowest": "#ffffff",
-            "surface-container-low": "#f7f3ed",
-            "surface-container": "#f1ede7",
-            "surface-container-high": "#ebe8e2",
-            "on-surface": "#1c1c18",
-            "on-surface-variant": "#574141",
-            "outline": "#8a7171",
-            "gold": "#d4af37",
-            "gold-dark": "#c59b27"
-          },
-          fontFamily: {
-            "serif": ["Playfair Display", "serif"],
-            "sans": ["Inter", "sans-serif"]
-          },
-          boxShadow: {
-            'card-hover': '0 10px 24px -4px rgba(43, 30, 30, 0.1), 0 4px 10px -2px rgba(212, 175, 55, 0.2)'
+    // Catálogo completo con productos individuales y grupos con subitems
+    const catalogoProductos = [
+      // MANTECADOS
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados de canela y ajonjolí', peso: '500 g', precio: 12.50, foto: 'imagenes/productos/mantecados_canela_ajonjoli.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados de chocolate', peso: '500 g', precio: 7.00, foto: 'imagenes/productos/mantecados_chocolate.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados de coco', peso: '500 g', precio: 10.00, foto: 'imagenes/productos/mantecados_coco.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados de limón', peso: '400 g', precio: 12.50, foto: 'imagenes/productos/mantecados_limon.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados de almendra', peso: '500 g', precio: 13.00, foto: 'imagenes/productos/mantecados_almendra.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados de pepitas', peso: '500 g', precio: 12.50, foto: 'imagenes/productos/mantecados_pepitas.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados caseros', peso: '500 g', precio: 13.00, foto: 'imagenes/productos/mantecados_caseros.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados de mantequilla', peso: '500 g', precio: 14.50, foto: 'imagenes/productos/mantecados_mantequilla.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados de aceite de oliva y almendras', peso: '500 g', precio: 13.00, foto: 'imagenes/productos/mantecados_aceite_oliva_almendras.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados Bombón crujiente', peso: '500 g', precio: 12.50, foto: 'imagenes/productos/mantecados_bombon_crujiente.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados Bombón (chocolate negro)', peso: '500 g', precio: 12.50, foto: 'imagenes/productos/mantecados_bombon_negro.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados Bombón blanco', peso: '500 g', precio: 12.50, foto: 'imagenes/productos/mantecados_bombon_blanco.webp', destacado: true },
+
+      // SURTIDOS
+      {
+        tipo: 'grupo',
+        grupo: 'Surtido clásico',
+        cat: 'Surtidos',
+        foto: 'imagenes/productos/grupo_surtido_clasico.webp',
+        subitems: [
+          { nombre: 'Surtido clásico', peso: '1 kg', precio: 14.00 },
+          { nombre: 'Surtido clásico', peso: '2 kg', precio: 22.50 },
+          { nombre: 'Surtido clásico', peso: '3 kg', precio: 29.50 },
+          { nombre: 'Surtido clásico', peso: '5 kg', precio: 49.00 }
+        ]
+      },
+      {
+        tipo: 'grupo',
+        grupo: 'Surtido especial Granada',
+        cat: 'Surtidos',
+        foto: 'imagenes/productos/grupo_surtido_granada.webp',
+        subitems: [
+          { nombre: 'Surtido especial Granada', peso: '1 kg', precio: 15.00 },
+          { nombre: 'Surtido especial Granada', peso: '2 kg', precio: 24.50 },
+          { nombre: 'Surtido especial Granada', peso: '3 kg', precio: 32.50 },
+          { nombre: 'Surtido especial Granada', peso: '5 kg', precio: 54.00 }
+        ]
+      },
+      { tipo: 'normal', cat: 'Surtidos', nombre: 'Tentación Negra', peso: '450 g', precio: 13.50, foto: 'imagenes/productos/tentacion_negra.webp', destacado: false },
+      { tipo: 'normal', cat: 'Surtidos', nombre: 'Tentación Blanca', peso: '450 g', precio: 13.50, foto: 'imagenes/productos/tentacion_blanca.webp', destacado: false },
+      { tipo: 'normal', cat: 'Surtidos', nombre: 'Panera surtido especial', peso: '1.200 g', precio: 23.00, foto: 'imagenes/productos/panera_surtido_especial.webp', destacado: false },
+      { tipo: 'normal', cat: 'Surtidos', nombre: 'Surtido sin gluten y sin lactosa', peso: '500 g', precio: 16.00, foto: 'imagenes/productos/surtido_sin_gluten_sin_lactosa.webp', destacado: false },
+
+      // ROSCOS
+      { tipo: 'normal', cat: 'Roscos', nombre: 'Roscos de vino y almendra', peso: '500 g', precio: 13.00, foto: 'imagenes/productos/roscos_vino_almendra.webp', destacado: false },
+      { tipo: 'normal', cat: 'Roscos', nombre: 'Chocorosco', peso: '450 g', precio: 12.00, foto: 'imagenes/productos/chocorosco.webp', destacado: false },
+      { tipo: 'normal', cat: 'Roscos', nombre: 'Roscos de almendra sin azúcar', peso: '400 g', precio: 14.50, foto: 'imagenes/productos/roscos_almendra_sin_azucar.webp', destacado: false },
+
+      // ESPECIALIDADES
+      {
+        tipo: 'grupo',
+        grupo: 'Pequibom',
+        cat: 'Especialidades',
+        foto: 'imagenes/productos/grupo_pequibom.webp',
+        subitems: [
+          { nombre: 'Pequibom', peso: '400 g', precio: 16.00, destacado: true },
+          { nombre: 'Pequibom Dark', peso: '400 g', precio: 16.00 },
+          { nombre: 'Pequibom Blanco', peso: '400 g', precio: 16.00 },
+          { nombre: 'Pequibom Surtido', peso: '400 g', precio: 16.00 }
+        ]
+      },
+      { tipo: 'normal', cat: 'Especialidades', nombre: 'Trufas', peso: '450 g', precio: 12.50, foto: 'imagenes/productos/trufas.webp', destacado: false },
+      { tipo: 'normal', cat: 'Especialidades', nombre: 'Bombones de coco', peso: '450 g', precio: 12.50, foto: 'imagenes/productos/bombones_coco.webp', destacado: false },
+      { tipo: 'normal', cat: 'Especialidades', nombre: 'Galletas chocolateadas', peso: '400 g', precio: 12.00, foto: 'imagenes/productos/galletas_chocolateadas.webp', destacado: false },
+      {
+        tipo: 'grupo',
+        grupo: 'Nupis Biscuit',
+        cat: 'Especialidades',
+        foto: 'imagenes/productos/grupo_nupis_biscuit.webp',
+        subitems: [
+          { nombre: 'Nupis Biscuit', peso: '400 g', precio: 14.50 },
+          { nombre: 'Nupis Biscuit Surtidas', peso: '400 g', precio: 14.50 }
+        ]
+      },
+      { tipo: 'normal', cat: 'Especialidades', nombre: 'Nupis Blancas', peso: '400 g', precio: 14.50, foto: 'imagenes/productos/nupis_blancas.webp', destacado: false },
+      { tipo: 'normal', cat: 'Especialidades', nombre: 'Charitas de almendra', peso: '500 g', precio: 13.50, foto: 'imagenes/productos/charitas_almendra.webp', destacado: false },
+      { tipo: 'normal', cat: 'Especialidades', nombre: 'KremyBombóm', peso: '400 g', precio: 14.00, foto: 'imagenes/productos/kremybombom.webp', destacado: false },
+
+      // POLVORONES Y RELLENOS
+      {
+        tipo: 'grupo',
+        grupo: 'Polvorones tradicionales',
+        cat: 'Polvorones y rellenos',
+        foto: 'imagenes/productos/grupo_polvorones_tradicionales.webp',
+        subitems: [
+          { nombre: 'Polvorón de almendra moño', peso: '500 g', precio: 13.50 },
+          { nombre: 'Polvorón moño', peso: '500 g', precio: 12.50 }
+        ]
+      },
+      { tipo: 'normal', cat: 'Polvorones y rellenos', nombre: 'Polvorón relleno de cacao', peso: '400 g', precio: 12.50, foto: 'imagenes/productos/polvoron_relleno_cacao.webp', destacado: false },
+      { tipo: 'normal', cat: 'Polvorones y rellenos', nombre: 'Nubes de pistacho', peso: '400 g', precio: 16.50, foto: 'imagenes/productos/nubes_pistacho.webp', destacado: false },
+
+      // SIN AZÚCAR
+      {
+        tipo: 'grupo',
+        grupo: 'Productos sin azúcar',
+        cat: 'Sin azúcar',
+        foto: 'imagenes/productos/grupo_sin_azucar.webp',
+        subitems: [
+          { nombre: 'Mantecados caseros sin azúcar', peso: '500 g', precio: 14.50, destacado: true },
+          { nombre: 'Mantecados de aceite y almendra sin azúcar', peso: '500 g', precio: 14.50 },
+          { nombre: 'Mantecados de almendra sin azúcar', peso: '500 g', precio: 14.50 },
+          { nombre: 'Surtido 9 sabores sin azúcar', peso: '500 g', precio: 14.50 },
+          { nombre: 'Mazapán de Soto sin azúcar', peso: '350 g', precio: 14.50 },
+          { nombre: 'Hojaldre especial sin azúcar', peso: '400 g', precio: 14.50 }
+        ]
+      },
+
+      // HOJALDRES
+      { tipo: 'normal', cat: 'Hojaldres', nombre: 'Hojaldre especial', peso: '500 g', precio: 13.00, foto: 'imagenes/productos/hojaldre_especial.webp', destacado: false },
+      {
+        tipo: 'grupo',
+        grupo: 'Hojaldres surtidos',
+        cat: 'Hojaldres',
+        foto: 'imagenes/productos/grupo_hojaldres_surtidos.webp',
+        subitems: [
+          { nombre: 'Hojaldres surtidos', peso: '500 g', precio: 12.50 },
+          { nombre: 'Hojaldres surtidos', peso: '1 kg', precio: 22.00 }
+        ]
+      },
+      { tipo: 'normal', cat: 'Hojaldres', nombre: 'Bombones surtidos', peso: '400 g', precio: 12.50, foto: 'imagenes/productos/bombones_surtidos.webp', destacado: false },
+
+      // ALFAJORES, MAZAPANES Y TURRONES
+      { tipo: 'normal', cat: 'Alfajores, mazapanes y turrones', nombre: 'Alfajores de almendra', peso: '500 g', precio: 14.00, foto: 'imagenes/productos/alfajores_almendra.webp', destacado: false },
+      { tipo: 'normal', cat: 'Alfajores, mazapanes y turrones', nombre: 'Alfajores de la Tita Pepa', peso: '450 g', precio: 14.00, foto: 'imagenes/productos/alfajores_tita_pepa.webp', destacado: false },
+      { tipo: 'normal', cat: 'Alfajores, mazapanes y turrones', nombre: 'Mazapán de Soto', peso: '400 g', precio: 14.00, foto: 'imagenes/productos/mazapan_soto.webp', destacado: false },
+      { tipo: 'normal', cat: 'Alfajores, mazapanes y turrones', nombre: 'Figuritas de mazapán', peso: '400 g', precio: 14.00, foto: 'imagenes/productos/figuritas_mazapan.webp', destacado: false },
+      { tipo: 'normal', cat: 'Alfajores, mazapanes y turrones', nombre: 'Piñonate', peso: '400 g', precio: 14.00, foto: 'imagenes/productos/pinonate.webp', destacado: false },
+      { tipo: 'normal', cat: 'Alfajores, mazapanes y turrones', nombre: 'Chocoalmendra', peso: '400 g', precio: 14.00, foto: 'imagenes/productos/chocoalmendra.webp', destacado: false },
+      { tipo: 'normal', cat: 'Alfajores, mazapanes y turrones', nombre: 'Huesitos de Santo', peso: '400 g', precio: 14.00, foto: 'imagenes/productos/huesitos_santo.webp', destacado: false },
+      {
+        tipo: 'grupo',
+        grupo: 'Turrones',
+        cat: 'Alfajores, mazapanes y turrones',
+        foto: 'imagenes/productos/grupo_turrones.webp',
+        subitems: [
+          { nombre: 'Turroncillo duro', peso: '400 g', precio: 14.00 },
+          { nombre: 'Turroncillo blando', peso: '400 g', precio: 14.00 },
+          { nombre: 'Turrón de chocolate crujiente', peso: '400 g', precio: 14.00 },
+          { nombre: 'Turrón de chocolate blanco', peso: '400 g', precio: 14.00 },
+          { nombre: 'Turrón guirlache', peso: '400 g', precio: 14.00 },
+          { nombre: 'Turrón de nata-nuez', peso: '400 g', precio: 14.00 },
+          { nombre: 'Turrón de praliné', peso: '400 g', precio: 14.00 },
+          { nombre: 'Turrón surtido', peso: '400 g', precio: 14.00 }
+        ]
+      },
+
+      // ALMENDRITAS RELLENAS
+      {
+        tipo: 'grupo',
+        grupo: 'Almendritas rellenas',
+        cat: 'Almendritas rellenas',
+        foto: 'imagenes/productos/grupo_almendritas_rellenas.webp',
+        subitems: [
+          { nombre: 'Almendritas rellenas de turrón', peso: '400 g', precio: 14.00 },
+          { nombre: 'Almendritas rellenas de cacahuete', peso: '400 g', precio: 14.00 },
+          { nombre: 'Almendritas rellenas de chocolate', peso: '400 g', precio: 14.00 },
+          { nombre: 'Almendritas rellenas de crema', peso: '400 g', precio: 14.00 }
+        ]
+      },
+
+      // CAJAS Y REGALOS (1 a 34 exactas)
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'SURTIDO ESPECIAL AZUL', peso: '1.600 g', precio: 24.20, foto: 'imagenes/productos/caja_1.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'PEQUIBOM', peso: '500 g', precio: 22.80, foto: 'imagenes/productos/caja_2.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'MANTECADOS CASEROS', peso: '600 g', precio: 16.50, foto: 'imagenes/productos/caja_3.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'MANTECADOS DE CANELA Y AJONJOLÍ', peso: '600 g', precio: 16.50, foto: 'imagenes/productos/caja_4.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'MANTECADOS DE LIMÓN', peso: '400 g', precio: 15.60, foto: 'imagenes/productos/caja_5.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'MANTECADOS BOMBÓN', peso: '850 g', precio: 22.50, foto: 'imagenes/productos/caja_6.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'HOJALDRES SURTIDOS', peso: '700 g', precio: 17.50, foto: 'imagenes/productos/caja_7.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'KREMYBOMBÓM', peso: '450 g', precio: 15.90, foto: 'imagenes/productos/caja_8.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'BOMBONES SURTIDOS', peso: '450 g', precio: 15.90, foto: 'imagenes/productos/caja_9.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'BOMBONES DE COCO', peso: '500 g', precio: 14.50, foto: 'imagenes/productos/caja_10.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'SURTIDO DE CHOCOLATES', peso: '500 g', precio: 17.50, foto: 'imagenes/productos/caja_11.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'PEQUIBOM SURTIDO', peso: '300 g', precio: 14.50, foto: 'imagenes/productos/caja_12.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'SURTIDO ESPECIAL AZUL GOLD', peso: '2.000 g', precio: 28.90, foto: 'imagenes/productos/caja_13.webp', destacado: true },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'CESTA MANTECADOS CASEROS', peso: '1.000 g', precio: 23.50, foto: 'imagenes/productos/caja_14.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'DELICIOSAS CHARITAS DE ALMENDRA', peso: '500 g', precio: 14.50, foto: 'imagenes/productos/caja_15.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'GALLETAS CHOCOLATEADAS', peso: '250 g', precio: 13.90, foto: 'imagenes/productos/caja_16.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'BOTE NUPIS BISCUIT BLANCA', peso: '275 g', precio: 13.50, foto: 'imagenes/productos/caja_17.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'MANTECADOS DE ACEITE DE OLIVA VIRGEN EXTRA Y ALMENDRAS', peso: '600 g', precio: 16.50, foto: 'imagenes/productos/caja_18.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'SURTIDO SIN AZÚCAR', peso: '550 g', precio: 17.50, foto: 'imagenes/productos/caja_19.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'ALMENDRITAS RELLENAS SURTIDAS', peso: '700 g', precio: 17.50, foto: 'imagenes/productos/caja_20.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'SURTIDO SIN GLUTEN Y SIN LACTOSA', peso: '400 g', precio: 16.25, foto: 'imagenes/productos/caja_21.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'SURTIDO ESPECIAL POLVORONES', peso: '550 g', precio: 17.50, foto: 'imagenes/productos/caja_22.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'SURTIDO DE MAZAPANES', peso: '450 g', precio: 18.50, foto: 'imagenes/productos/caja_23.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'ROSCOS DE VINO', peso: '250 g', precio: 12.50, foto: 'imagenes/productos/caja_24.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'TENTACIÓN BLANCA', peso: '475 g', precio: 16.50, foto: 'imagenes/productos/caja_25.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'TENTACIÓN NEGRA', peso: '475 g', precio: 16.50, foto: 'imagenes/productos/caja_26.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'FAROLILLO POLVORONES RELLENOS DE CACAO', peso: '400 g', precio: 16.50, foto: 'imagenes/productos/caja_27.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'LATA CHOCOROSCOS SURTIDOS', peso: '500 g', precio: 18.50, foto: 'imagenes/productos/caja_28.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'LATA POLVORÓN TRADICIONAL MOÑO', peso: '350 g', precio: 16.50, foto: 'imagenes/productos/caja_29.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'LATA SURTIDO DE NAVIDAD', peso: '600 g', precio: 22.50, foto: 'imagenes/productos/caja_30.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'LATA LA DESPENSA DE EL PATRIARCA', peso: '400 g', precio: 17.50, foto: 'imagenes/productos/caja_31.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'NUBES DE PISTACHO', peso: '1.000 g', precio: 34.50, foto: 'imagenes/productos/caja_32.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'LATA GRAN RESERVA', peso: '2.100 g', precio: 52.50, foto: 'imagenes/productos/caja_33.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'LOTE SELECCIÓN', peso: '3.950 g', precio: 70.50, foto: 'imagenes/productos/caja_34.webp', destacado: false }
+    ];
+
+    let categoriaActual = 'Todos';
+    let carrito = []; // Formato de cada item: { nombre, peso, precio, cantidad }
+    let cantidadesGrupos = {}; // Key: "nombre|peso" -> cantidad
+
+    function formatearEuros(valor) {
+      return Number(valor).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    }
+
+    function mostrarToast(mensaje) {
+      const toast = document.getElementById('toast-notificacion');
+      const texto = document.getElementById('toast-texto');
+      if (!toast || !texto) return;
+      texto.innerText = mensaje;
+      toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+      }, 3000);
+    }
+
+    function getCantGrupo(key) {
+      return cantidadesGrupos[key] || 1;
+    }
+
+    function modificarCantGrupo(key, delta) {
+      const actual = cantidadesGrupos[key] || 1;
+      const nuevo = Math.max(1, actual + delta);
+      cantidadesGrupos[key] = nuevo;
+      const el = document.getElementById('cant-grupo-' + key.replace(/[^a-zA-Z0-9]/g, '_'));
+      if (el) el.innerText = nuevo;
+    }
+
+    // Renderizar catálogo con tarjetas normales y de grupo
+    function renderizarCatalogo(productos) {
+      const contenedor = document.getElementById('lista-productos-catalogo');
+      if (!contenedor) return;
+
+      if (productos.length === 0) {
+        contenedor.innerHTML = `
+          <div class="col-span-full py-12 text-center text-on-surface-variant bg-surface-container-low rounded-2xl p-6">
+            <span class="material-symbols-outlined text-[48px] text-outline mb-2">search_off</span>
+            <p class="font-serif text-lg font-bold">No hemos encontrado dulces con esa búsqueda</p>
+            <p class="text-xs text-outline mt-1">Prueba seleccionando otra categoría o borrando el buscador.</p>
+          </div>
+        `;
+        return;
+      }
+
+      contenedor.innerHTML = productos.map(prod => {
+        if (prod.tipo === 'grupo') {
+          // Tarjeta de Grupo: ocupa todo el ancho
+          const subitemsVisibles = prod.subitemsFiltrados || prod.subitems;
+          if (subitemsVisibles.length === 0) return '';
+
+          const filasHtml = subitemsVisibles.map(sub => {
+            const key = sub.nombre + '|' + sub.peso;
+            const cantId = 'cant-grupo-' + key.replace(/[^a-zA-Z0-9]/g, '_');
+            const cant = getCantGrupo(key);
+
+            return `
+              <div class="min-h-[48px] py-2.5 px-3 rounded-xl bg-surface-container-lowest border border-outline/15 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold/40 transition-colors">
+                <div class="flex items-center gap-2.5 flex-1 min-w-0">
+                  <span class="font-serif font-bold text-primary text-sm sm:text-base truncate">${sub.nombre}</span>
+                  <span class="px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-xs font-semibold shrink-0">${sub.peso}</span>
+                </div>
+
+                <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0">
+                  <span class="font-sans font-bold text-primary text-base sm:text-lg min-w-[75px] text-right">${formatearEuros(sub.precio)}</span>
+
+                  <!-- Selector de cantidad -->
+                  <div class="flex items-center gap-1.5 bg-surface-container rounded-lg p-1">
+                    <button type="button" onclick="modificarCantGrupo('${sub.nombre.replace(/'/g, "\'")}|${sub.peso}', -1)" aria-label="Restar unidad" class="w-7 h-7 rounded bg-white text-on-surface hover:bg-surface-container-high flex items-center justify-center font-bold text-xs active:scale-95 transition-all shadow-xs">
+                      <span class="material-symbols-outlined text-[14px]">remove</span>
+                    </button>
+                    <span id="${cantId}" class="w-6 text-center font-bold text-xs font-sans">${cant}</span>
+                    <button type="button" onclick="modificarCantGrupo('${sub.nombre.replace(/'/g, "\'")}|${sub.peso}', 1)" aria-label="Sumar unidad" class="w-7 h-7 rounded bg-white text-on-surface hover:bg-surface-container-high flex items-center justify-center font-bold text-xs active:scale-95 transition-all shadow-xs">
+                      <span class="material-symbols-outlined text-[14px]">add</span>
+                    </button>
+                  </div>
+
+                  <!-- Botón Añadir -->
+                  <button 
+                    onclick="agregarAlPedidoConCantidad('${sub.nombre.replace(/'/g, "\'")}', '${sub.peso}', ${sub.precio}, '${key.replace(/'/g, "\'")}')"
+                    class="h-9 px-3 rounded-lg bg-primary text-on-primary font-bold text-xs flex items-center justify-center gap-1 hover:bg-primary-container active:scale-95 transition-all shadow-sm">
+                    <span class="material-symbols-outlined text-[15px]">add_shopping_cart</span>
+                    <span class="hidden md:inline">Añadir</span>
+                  </button>
+
+                  <!-- Icono WhatsApp -->
+                  <a 
+                    href="https://wa.me/34644173089?text=${encodeURIComponent('Hola Julia, me gustaría consultar detalles sobre ' + sub.nombre + ' (' + sub.peso + ') por ' + formatearEuros(sub.precio))}" 
+                    target="_blank"
+                    aria-label="Consultar por WhatsApp"
+                    class="w-9 h-9 rounded-lg bg-surface-container hover:bg-surface-container-high text-[#25D366] flex items-center justify-center active:scale-95 transition-all border border-outline/20">
+                    <span class="material-symbols-outlined text-[18px]">chat</span>
+                  </a>
+                </div>
+              </div>
+            `;
+          }).join('');
+
+          return `
+            <article class="col-span-full bg-white rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-card-hover transition-all duration-300 border border-gold/40 flex flex-col gap-5">
+              <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+                <div class="md:col-span-4 w-full aspect-[4/3] rounded-xl overflow-hidden bg-amber-50/50 flex items-center justify-center border border-gold/20 p-2">
+                  <img src="${prod.foto}" alt="${prod.grupo}" loading="lazy" class="w-full h-full object-contain hover:scale-105 transition-transform duration-300" />
+                </div>
+                <div class="md:col-span-8 flex flex-col gap-3">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-1 rounded-md bg-gold/15 text-gold-dark text-[11px] font-bold uppercase tracking-wider border border-gold/30">${prod.cat}</span>
+                    <span class="px-2.5 py-1 rounded-md bg-primary/10 text-primary text-[11px] font-bold uppercase tracking-wider border border-primary/20">Colección</span>
+                  </div>
+                  <h3 class="font-serif text-2xl md:text-3xl font-bold text-primary">${prod.grupo}</h3>
+                  <div class="flex flex-col gap-2 pt-1">
+                    ${filasHtml}
+                  </div>
+                </div>
+              </div>
+            </article>
+          `;
+        }
+
+        // Tarjeta normal
+        return `
+          <article class="relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-card-hover transition-all duration-300 border border-gold/40 flex flex-col justify-between group">
+            <div class="absolute top-4 right-4 z-10 text-gold/60 select-none">
+              <span class="material-symbols-outlined text-[18px]">star</span>
+            </div>
+
+            <div class="flex flex-col gap-3">
+              <!-- Fotografía 4:3 con fondo crema -->
+              <div class="w-full aspect-[4/3] rounded-xl overflow-hidden bg-amber-50/50 flex items-center justify-center border border-gold/20 p-2">
+                <img src="${prod.foto}" alt="${prod.nombre}" loading="lazy" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
+              </div>
+
+              <!-- Etiqueta de Categoría en Dorado -->
+              <div class="flex items-center">
+                <span class="px-2.5 py-1 rounded-md bg-gold/15 text-gold-dark text-[11px] font-bold uppercase tracking-wider border border-gold/30">${prod.cat}</span>
+              </div>
+
+              <!-- Nombre del Producto en Serif grande y Rojo Oscuro -->
+              <h3 class="font-serif text-xl font-bold text-primary mt-1 leading-snug">${prod.nombre}</h3>
+              
+              <!-- Peso tipo Chip y Precio grande en Rojo Oscuro -->
+              <div class="flex items-center gap-3">
+                <span class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant text-xs font-semibold">${prod.peso}</span>
+                <span class="font-sans text-2xl font-bold text-primary">${formatearEuros(prod.precio)}</span>
+              </div>
+            </div>
+
+            <!-- Botones «Añadir al pedido» y «Consultar por WhatsApp» -->
+            <div class="flex flex-col gap-2 pt-4 mt-3 border-t border-surface-container">
+              <button 
+                onclick="agregarAlPedido('${prod.nombre.replace(/'/g, "\'")}', '${prod.peso}', ${prod.precio})"
+                class="w-full h-11 rounded-xl bg-primary text-on-primary font-bold text-xs flex items-center justify-center gap-1.5 hover:bg-primary-container active:scale-95 transition-all shadow-sm">
+                <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+                <span>Añadir al pedido</span>
+              </button>
+              <a 
+                href="https://wa.me/34644173089?text=${encodeURIComponent('Hola Julia, me gustaría consultar detalles sobre ' + prod.nombre + ' (' + prod.peso + ') por ' + formatearEuros(prod.precio))}" 
+                target="_blank"
+                class="w-full h-11 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all border border-outline/20">
+                <span class="material-symbols-outlined text-[16px] text-[#25D366]">chat</span>
+                <span>Consultar por WhatsApp</span>
+              </a>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function filtrarProductos() {
+      const texto = (document.getElementById('buscador-productos')?.value || '').toLowerCase().trim();
+      const orden = document.getElementById('selector-orden')?.value || 'predeterminado';
+
+      let filtrados = [];
+
+      catalogoProductos.forEach(item => {
+        const coincideCat = (categoriaActual === 'Todos' || item.cat === categoriaActual);
+        if (!coincideCat) return;
+
+        if (item.tipo === 'grupo') {
+          // Filtrar subitems del grupo
+          let subitemsMatching = item.subitems.filter(sub => {
+            if (!texto) return true;
+            return sub.nombre.toLowerCase().includes(texto) || item.grupo.toLowerCase().includes(texto) || item.cat.toLowerCase().includes(texto);
+          });
+
+          if (subitemsMatching.length > 0) {
+            filtrados.push({
+              ...item,
+              subitemsFiltrados: subitemsMatching
+            });
+          }
+        } else {
+          const coincideTexto = !texto || item.nombre.toLowerCase().includes(texto) || item.cat.toLowerCase().includes(texto);
+          if (coincideTexto) {
+            filtrados.push(item);
           }
         }
+      });
+
+      if (orden === 'precio-asc') {
+        filtrados.sort((a, b) => {
+          const pA = a.tipo === 'grupo' ? Math.min(...a.subitems.map(s => s.precio)) : a.precio;
+          const pB = b.tipo === 'grupo' ? Math.min(...b.subitems.map(s => s.precio)) : b.precio;
+          return pA - pB;
+        });
+      } else if (orden === 'precio-desc') {
+        filtrados.sort((a, b) => {
+          const pA = a.tipo === 'grupo' ? Math.max(...a.subitems.map(s => s.precio)) : a.precio;
+          const pB = b.tipo === 'grupo' ? Math.max(...b.subitems.map(s => s.precio)) : b.precio;
+          return pB - pA;
+        });
+      } else if (orden === 'nombre') {
+        filtrados.sort((a, b) => {
+          const nA = a.tipo === 'grupo' ? a.grupo : a.nombre;
+          const nB = b.tipo === 'grupo' ? b.grupo : b.nombre;
+          return nA.localeCompare(nB);
+        });
+      }
+
+      renderizarCatalogo(filtrados);
+    }
+
+    function seleccionarCategoria(cat) {
+      categoriaActual = cat;
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        if (btn.getAttribute('data-cat') === cat) {
+          btn.className = "cat-pill shrink-0 px-5 py-2.5 rounded-full text-xs font-bold bg-primary text-on-primary shadow-sm";
+        } else {
+          btn.className = "cat-pill shrink-0 px-5 py-2.5 rounded-full text-xs font-bold bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors";
+        }
+      });
+      filtrarProductos();
+    }
+
+    function agregarAlPedido(nombre, peso, precio) {
+      const index = carrito.findIndex(i => i.nombre === nombre && i.peso === peso);
+      if (index > -1) {
+        carrito[index].cantidad += 1;
+      } else {
+        carrito.push({ nombre, peso, precio, cantidad: 1 });
+      }
+      actualizarVistaResumen();
+      mostrarToast(`${nombre} (${peso}) añadido a tu pedido.`);
+    }
+
+    function agregarAlPedidoConCantidad(nombre, peso, precio, key) {
+      const cant = getCantGrupo(key);
+      const index = carrito.findIndex(i => i.nombre === nombre && i.peso === peso);
+      if (index > -1) {
+        carrito[index].cantidad += cant;
+      } else {
+        carrito.push({ nombre, peso, precio, cantidad: cant });
+      }
+      // Reset group counter to 1
+      cantidadesGrupos[key] = 1;
+      const el = document.getElementById('cant-grupo-' + key.replace(/[^a-zA-Z0-9]/g, '_'));
+      if (el) el.innerText = 1;
+
+      actualizarVistaResumen();
+      mostrarToast(`${cant} × ${nombre} (${peso}) añadido a tu pedido.`);
+    }
+
+    function cambiarCantidad(index, delta) {
+      if (carrito[index]) {
+        carrito[index].cantidad += delta;
+        if (carrito[index].cantidad <= 0) {
+          carrito.splice(index, 1);
+        }
+        actualizarVistaResumen();
       }
     }
+
+    function eliminarItem(index) {
+      carrito.splice(index, 1);
+      actualizarVistaResumen();
+    }
+
+    function vaciarPedido() {
+      carrito = [];
+      actualizarVistaResumen();
+    }
+
+    function actualizarVistaResumen() {
+      const vacioEl = document.getElementById('items-resumen-vacio');
+      const listaEl = document.getElementById('items-resumen-lista');
+      const totalesEl = document.getElementById('resumen-totales-bloque');
+      const precioTotalEl = document.getElementById('resumen-precio-total');
+      const counterBadge = document.getElementById('cart-counter-badge');
+
+      const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+      counterBadge.innerText = totalItems;
+
+      if (carrito.length === 0) {
+        vacioEl.classList.remove('hidden');
+        listaEl.classList.add('hidden');
+        totalesEl.classList.add('hidden');
+        return;
+      }
+
+      vacioEl.classList.add('hidden');
+      listaEl.classList.remove('hidden');
+      totalesEl.classList.remove('hidden');
+
+      let total = 0;
+      listaEl.innerHTML = carrito.map((item, idx) => {
+        const subtotal = item.precio * item.cantidad;
+        total += subtotal;
+        return `
+          <div class="py-4 flex items-center justify-between gap-3">
+            <div class="flex flex-col min-w-0 flex-1">
+              <span class="font-serif text-base font-bold text-on-surface truncate">${item.nombre}</span>
+              <span class="text-xs text-on-surface-variant font-medium">${item.peso} · ${formatearEuros(item.precio)} / ud</span>
+              <span class="text-xs font-bold text-primary mt-0.5">Subtotal: ${formatearEuros(subtotal)}</span>
+            </div>
+
+            <div class="flex items-center gap-2 shrink-0">
+              <button onclick="cambiarCantidad(${idx}, -1)" aria-label="Restar una unidad" class="w-8 h-8 rounded-lg bg-surface-container hover:bg-surface-container-high flex items-center justify-center font-bold text-on-surface active:scale-95 transition-all">
+                <span class="material-symbols-outlined text-[16px]">remove</span>
+              </button>
+              <span class="w-6 text-center font-bold text-sm font-sans">${item.cantidad}</span>
+              <button onclick="cambiarCantidad(${idx}, 1)" aria-label="Sumar una unidad" class="w-8 h-8 rounded-lg bg-surface-container hover:bg-surface-container-high flex items-center justify-center font-bold text-on-surface active:scale-95 transition-all">
+                <span class="material-symbols-outlined text-[16px]">add</span>
+              </button>
+              <button onclick="eliminarItem(${idx})" aria-label="Eliminar producto" class="w-8 h-8 ml-1 text-outline hover:text-error flex items-center justify-center active:scale-95 transition-all">
+                <span class="material-symbols-outlined text-[18px]">delete</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      precioTotalEl.innerText = formatearEuros(total);
+    }
+
+    function enviarPedidoWhatsApp() {
+      if (carrito.length === 0) {
+        alert('Por favor, añade al menos un dulce a tu pedido.');
+        return;
+      }
+
+      const nombre = document.getElementById('pedido-nombre')?.value.trim() || 'No especificado';
+      const comentarios = document.getElementById('pedido-comentarios')?.value.trim() || '';
+
+      let total = 0;
+      let mensaje = `Hola Julia, quiero hacer este pedido:
+
+`;
+
+      carrito.forEach((item) => {
+        const sub = item.precio * item.cantidad;
+        total += sub;
+        mensaje += `${item.cantidad} × ${item.nombre} (${item.peso}) - ${formatearEuros(sub)}
+`;
+      });
+
+      mensaje += `
+Total: ${formatearEuros(total)}
+`;
+      if (nombre && nombre !== 'No especificado') {
+        mensaje += `Nombre: ${nombre}
+`;
+      }
+      if (comentarios) {
+        mensaje += `Comentarios: ${comentarios}
+`;
+      }
+      mensaje += `
+¿Cuándo y dónde podemos quedar?`;
+
+      const url = `https://wa.me/34644173089?text=${encodeURIComponent(mensaje)}`;
+      window.open(url, '_blank');
+    }
+
+    // Inicialización
+    document.addEventListener('DOMContentLoaded', () => {
+      renderizarCatalogo(catalogoProductos);
+      actualizarVistaResumen();
+    });
   </script>
 
   <style>
@@ -217,115 +769,168 @@
         <div class="w-16 h-1 bg-gold rounded-full mt-3"></div>
       </div>
 
-      <!-- Cuadrícula 3 Tarjetas Destacadas -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Cuadrícula 4 Tarjetas Destacadas -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         
         <!-- 1. Pequibom -->
-        <article class="relative bg-white rounded-2xl p-6 shadow-md hover:shadow-card-hover transition-all duration-300 border-2 border-gold/70 flex flex-col justify-between group">
-          <div class="absolute top-4 right-4 text-gold select-none">
-            <span class="material-symbols-outlined text-[22px]">sparkles</span>
+        <article class="relative bg-white rounded-2xl p-5 shadow-md hover:shadow-card-hover transition-all duration-300 border-2 border-gold/70 flex flex-col justify-between group">
+          <div class="absolute top-4 right-4 z-10 text-gold select-none">
+            <span class="material-symbols-outlined text-[20px]">sparkles</span>
           </div>
 
           <div class="flex flex-col gap-3">
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-1 rounded-md bg-gold/15 text-gold-dark text-[11px] font-bold uppercase tracking-wider border border-gold/30">Especialidades</span>
-              <span class="badge-gold px-2.5 py-1 rounded-full font-bold text-[11px] shadow-sm">Destacado</span>
+            <div class="w-full aspect-[4/3] rounded-xl overflow-hidden bg-amber-50/50 flex items-center justify-center border border-gold/20 p-2">
+              <img src="imagenes/productos/grupo_pequibom.webp" alt="Pequibom" loading="lazy" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
             </div>
 
-            <h3 class="font-serif text-2xl font-bold text-primary mt-1 leading-snug">Pequibom</h3>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-gold/15 text-gold-dark text-[10px] font-bold uppercase tracking-wider border border-gold/30">Especialidades</span>
+              <span class="badge-gold px-2 py-0.5 rounded-full font-bold text-[10px] shadow-sm">Destacado</span>
+            </div>
+
+            <h3 class="font-serif text-xl font-bold text-primary leading-snug">Pequibom</h3>
 
             <div class="flex items-center gap-3">
-              <span class="px-3 py-1 rounded-full bg-surface-container text-on-surface-variant text-xs font-semibold">400 g</span>
-              <span class="font-sans text-2xl font-bold text-primary">16,00 €</span>
+              <span class="px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-xs font-semibold">400 g</span>
+              <span class="font-sans text-xl font-bold text-primary">16,00 €</span>
             </div>
           </div>
 
-          <div class="flex flex-col gap-2.5 pt-5 mt-4 border-t border-surface-container">
+          <div class="flex flex-col gap-2 pt-4 mt-3 border-t border-surface-container">
             <button 
               onclick="agregarAlPedido('Pequibom', '400 g', 16.00)"
-              class="w-full h-12 rounded-xl bg-primary text-on-primary font-bold text-sm flex items-center justify-center gap-2 hover:bg-primary-container active:scale-95 transition-all shadow-md">
-              <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+              class="w-full h-11 rounded-xl bg-primary text-on-primary font-bold text-xs flex items-center justify-center gap-1.5 hover:bg-primary-container active:scale-95 transition-all shadow-md">
+              <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
               <span>Añadir al pedido</span>
             </button>
             <a 
-              href="https://wa.me/34644173089?text=${encodeURIComponent('Hola Julia, me gustaría consultar detalles sobre Pequibom (400 g) por 16,00 €')}" 
+              href="https://wa.me/34644173089?text=Hola%20Julia,%20me%20gustar%C3%ADa%20consultar%20detalles%20sobre%20Pequibom%20(400%20g)%20por%2016,00%20%E2%82%AC" 
               target="_blank"
-              class="w-full h-12 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-bold text-sm flex items-center justify-center gap-2 active:scale-95 transition-all border border-outline/20">
-              <span class="material-symbols-outlined text-[18px] text-[#25D366]">chat</span>
+              class="w-full h-11 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all border border-outline/20">
+              <span class="material-symbols-outlined text-[16px] text-[#25D366]">chat</span>
               <span>Consultar por WhatsApp</span>
             </a>
           </div>
         </article>
 
         <!-- 2. Mantecados caseros sin azúcar -->
-        <article class="relative bg-white rounded-2xl p-6 shadow-md hover:shadow-card-hover transition-all duration-300 border-2 border-gold/70 flex flex-col justify-between group">
-          <div class="absolute top-4 right-4 text-gold select-none">
-            <span class="material-symbols-outlined text-[22px]">star</span>
+        <article class="relative bg-white rounded-2xl p-5 shadow-md hover:shadow-card-hover transition-all duration-300 border-2 border-gold/70 flex flex-col justify-between group">
+          <div class="absolute top-4 right-4 z-10 text-gold select-none">
+            <span class="material-symbols-outlined text-[20px]">star</span>
           </div>
 
           <div class="flex flex-col gap-3">
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-1 rounded-md bg-gold/15 text-gold-dark text-[11px] font-bold uppercase tracking-wider border border-gold/30">Sin azúcar</span>
-              <span class="badge-gold px-2.5 py-1 rounded-full font-bold text-[11px] shadow-sm">Destacado</span>
+            <div class="w-full aspect-[4/3] rounded-xl overflow-hidden bg-amber-50/50 flex items-center justify-center border border-gold/20 p-2">
+              <img src="imagenes/productos/grupo_sin_azucar.webp" alt="Mantecados caseros sin azúcar" loading="lazy" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
             </div>
 
-            <h3 class="font-serif text-2xl font-bold text-primary mt-1 leading-snug">Mantecados caseros sin azúcar</h3>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-gold/15 text-gold-dark text-[10px] font-bold uppercase tracking-wider border border-gold/30">Sin azúcar</span>
+              <span class="badge-gold px-2 py-0.5 rounded-full font-bold text-[10px] shadow-sm">Destacado</span>
+            </div>
+
+            <h3 class="font-serif text-xl font-bold text-primary leading-snug">Mantecados caseros sin azúcar</h3>
 
             <div class="flex items-center gap-3">
-              <span class="px-3 py-1 rounded-full bg-surface-container text-on-surface-variant text-xs font-semibold">500 g</span>
-              <span class="font-sans text-2xl font-bold text-primary">14,50 €</span>
+              <span class="px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-xs font-semibold">500 g</span>
+              <span class="font-sans text-xl font-bold text-primary">14,50 €</span>
             </div>
           </div>
 
-          <div class="flex flex-col gap-2.5 pt-5 mt-4 border-t border-surface-container">
+          <div class="flex flex-col gap-2 pt-4 mt-3 border-t border-surface-container">
             <button 
               onclick="agregarAlPedido('Mantecados caseros sin azúcar', '500 g', 14.50)"
-              class="w-full h-12 rounded-xl bg-primary text-on-primary font-bold text-sm flex items-center justify-center gap-2 hover:bg-primary-container active:scale-95 transition-all shadow-md">
-              <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+              class="w-full h-11 rounded-xl bg-primary text-on-primary font-bold text-xs flex items-center justify-center gap-1.5 hover:bg-primary-container active:scale-95 transition-all shadow-md">
+              <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
               <span>Añadir al pedido</span>
             </button>
             <a 
-              href="https://wa.me/34644173089?text=${encodeURIComponent('Hola Julia, me gustaría consultar detalles sobre Mantecados caseros sin azúcar (500 g) por 14,50 €')}" 
+              href="https://wa.me/34644173089?text=Hola%20Julia,%20me%20gustar%C3%ADa%20consultar%20detalles%20sobre%20Mantecados%20caseros%20sin%20az%C3%BAcar%20(500%20g)%20por%2014,50%20%E2%82%AC" 
               target="_blank"
-              class="w-full h-12 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-bold text-sm flex items-center justify-center gap-2 active:scale-95 transition-all border border-outline/20">
-              <span class="material-symbols-outlined text-[18px] text-[#25D366]">chat</span>
+              class="w-full h-11 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all border border-outline/20">
+              <span class="material-symbols-outlined text-[16px] text-[#25D366]">chat</span>
               <span>Consultar por WhatsApp</span>
             </a>
           </div>
         </article>
 
         <!-- 3. Mantecados Bombón blanco -->
-        <article class="relative bg-white rounded-2xl p-6 shadow-md hover:shadow-card-hover transition-all duration-300 border-2 border-gold/70 flex flex-col justify-between group">
-          <div class="absolute top-4 right-4 text-gold select-none">
-            <span class="material-symbols-outlined text-[22px]">sparkles</span>
+        <article class="relative bg-white rounded-2xl p-5 shadow-md hover:shadow-card-hover transition-all duration-300 border-2 border-gold/70 flex flex-col justify-between group">
+          <div class="absolute top-4 right-4 z-10 text-gold select-none">
+            <span class="material-symbols-outlined text-[20px]">sparkles</span>
           </div>
 
           <div class="flex flex-col gap-3">
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-1 rounded-md bg-gold/15 text-gold-dark text-[11px] font-bold uppercase tracking-wider border border-gold/30">Mantecados</span>
-              <span class="badge-gold px-2.5 py-1 rounded-full font-bold text-[11px] shadow-sm">Destacado</span>
+            <div class="w-full aspect-[4/3] rounded-xl overflow-hidden bg-amber-50/50 flex items-center justify-center border border-gold/20 p-2">
+              <img src="imagenes/productos/mantecados_bombon_blanco.webp" alt="Mantecados Bombón blanco" loading="lazy" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
             </div>
 
-            <h3 class="font-serif text-2xl font-bold text-primary mt-1 leading-snug">Mantecados Bombón blanco</h3>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-gold/15 text-gold-dark text-[10px] font-bold uppercase tracking-wider border border-gold/30">Mantecados</span>
+              <span class="badge-gold px-2 py-0.5 rounded-full font-bold text-[10px] shadow-sm">Destacado</span>
+            </div>
+
+            <h3 class="font-serif text-xl font-bold text-primary leading-snug">Mantecados Bombón blanco</h3>
 
             <div class="flex items-center gap-3">
-              <span class="px-3 py-1 rounded-full bg-surface-container text-on-surface-variant text-xs font-semibold">500 g</span>
-              <span class="font-sans text-2xl font-bold text-primary">12,50 €</span>
+              <span class="px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-xs font-semibold">500 g</span>
+              <span class="font-sans text-xl font-bold text-primary">12,50 €</span>
             </div>
           </div>
 
-          <div class="flex flex-col gap-2.5 pt-5 mt-4 border-t border-surface-container">
+          <div class="flex flex-col gap-2 pt-4 mt-3 border-t border-surface-container">
             <button 
               onclick="agregarAlPedido('Mantecados Bombón blanco', '500 g', 12.50)"
-              class="w-full h-12 rounded-xl bg-primary text-on-primary font-bold text-sm flex items-center justify-center gap-2 hover:bg-primary-container active:scale-95 transition-all shadow-md">
-              <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+              class="w-full h-11 rounded-xl bg-primary text-on-primary font-bold text-xs flex items-center justify-center gap-1.5 hover:bg-primary-container active:scale-95 transition-all shadow-md">
+              <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
               <span>Añadir al pedido</span>
             </button>
             <a 
-              href="https://wa.me/34644173089?text=${encodeURIComponent('Hola Julia, me gustaría consultar detalles sobre Mantecados Bombón blanco (500 g) por 12,50 €')}" 
+              href="https://wa.me/34644173089?text=Hola%20Julia,%20me%20gustar%C3%ADa%20consultar%20detalles%20sobre%20Mantecados%20Bomb%C3%B3n%20blanco%20(500%20g)%20por%2012,50%20%E2%82%AC" 
               target="_blank"
-              class="w-full h-12 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-bold text-sm flex items-center justify-center gap-2 active:scale-95 transition-all border border-outline/20">
-              <span class="material-symbols-outlined text-[18px] text-[#25D366]">chat</span>
+              class="w-full h-11 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all border border-outline/20">
+              <span class="material-symbols-outlined text-[16px] text-[#25D366]">chat</span>
+              <span>Consultar por WhatsApp</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- 4. SURTIDO ESPECIAL AZUL GOLD -->
+        <article class="relative bg-white rounded-2xl p-5 shadow-md hover:shadow-card-hover transition-all duration-300 border-2 border-gold/70 flex flex-col justify-between group">
+          <div class="absolute top-4 right-4 z-10 text-gold select-none">
+            <span class="material-symbols-outlined text-[20px]">sparkles</span>
+          </div>
+
+          <div class="flex flex-col gap-3">
+            <div class="w-full aspect-[4/3] rounded-xl overflow-hidden bg-amber-50/50 flex items-center justify-center border border-gold/20 p-2">
+              <img src="imagenes/productos/caja_13.webp" alt="SURTIDO ESPECIAL AZUL GOLD" loading="lazy" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
+            </div>
+
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-gold/15 text-gold-dark text-[10px] font-bold uppercase tracking-wider border border-gold/30">Cajas y regalos</span>
+              <span class="badge-gold px-2 py-0.5 rounded-full font-bold text-[10px] shadow-sm">Destacado</span>
+            </div>
+
+            <h3 class="font-serif text-xl font-bold text-primary leading-snug">SURTIDO ESPECIAL AZUL GOLD</h3>
+
+            <div class="flex items-center gap-3">
+              <span class="px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-xs font-semibold">2.000 g</span>
+              <span class="font-sans text-xl font-bold text-primary">28,90 €</span>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-2 pt-4 mt-3 border-t border-surface-container">
+            <button 
+              onclick="agregarAlPedido('SURTIDO ESPECIAL AZUL GOLD', '2.000 g', 28.90)"
+              class="w-full h-11 rounded-xl bg-primary text-on-primary font-bold text-xs flex items-center justify-center gap-1.5 hover:bg-primary-container active:scale-95 transition-all shadow-md">
+              <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+              <span>Añadir al pedido</span>
+            </button>
+            <a 
+              href="https://wa.me/34644173089?text=Hola%20Julia,%20me%20gustar%C3%ADa%20consultar%20detalles%20sobre%20SURTIDO%20ESPECIAL%20AZUL%20GOLD%20(2.000%20g)%20por%2028,90%20%E2%82%AC" 
+              target="_blank"
+              class="w-full h-11 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all border border-outline/20">
+              <span class="material-symbols-outlined text-[16px] text-[#25D366]">chat</span>
               <span>Consultar por WhatsApp</span>
             </a>
           </div>
@@ -333,7 +938,6 @@
 
       </div>
     </section>
-
 
     <!-- 5. CATÁLOGO COMPLETO -->
     <section id="catalogo-seccion" class="max-w-7xl mx-auto px-4 md:px-8 py-14 flex flex-col gap-8">
@@ -381,6 +985,7 @@
         <button onclick="seleccionarCategoria('Hojaldres')" data-cat="Hojaldres" class="cat-pill shrink-0 px-5 py-2.5 rounded-full text-xs font-bold bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors">Hojaldres</button>
         <button onclick="seleccionarCategoria('Alfajores, mazapanes y turrones')" data-cat="Alfajores, mazapanes y turrones" class="cat-pill shrink-0 px-5 py-2.5 rounded-full text-xs font-bold bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors">Alfajores, mazapanes y turrones</button>
         <button onclick="seleccionarCategoria('Almendritas rellenas')" data-cat="Almendritas rellenas" class="cat-pill shrink-0 px-5 py-2.5 rounded-full text-xs font-bold bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors">Almendritas rellenas</button>
+        <button onclick="seleccionarCategoria('Cajas y regalos')" data-cat="Cajas y regalos" class="cat-pill shrink-0 px-5 py-2.5 rounded-full text-xs font-bold bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors">Cajas y regalos</button>
       </div>
 
       <!-- Cuadrícula Catálogo (1 col móvil, 2 tablet, 3 ordenador) -->
@@ -659,128 +1264,242 @@
 
   <!-- LÓGICA INTERACTIVA EN JAVASCRIPT -->
   <script>
-    // Catálogo completo único y fácilmente editable
+    // Catálogo completo con productos individuales y grupos con subitems
     const catalogoProductos = [
       // MANTECADOS
-      { cat: 'Mantecados', nombre: 'Mantecados de canela y ajonjolí', peso: '500 g', precio: 12.50, destacado: false },
-      { cat: 'Mantecados', nombre: 'Mantecados de chocolate', peso: '500 g', precio: 7.00, destacado: false },
-      { cat: 'Mantecados', nombre: 'Mantecados de coco', peso: '500 g', precio: 10.00, destacado: false },
-      { cat: 'Mantecados', nombre: 'Mantecados de limón', peso: '400 g', precio: 12.50, destacado: false },
-      { cat: 'Mantecados', nombre: 'Mantecados de almendra', peso: '500 g', precio: 13.00, destacado: false },
-      { cat: 'Mantecados', nombre: 'Mantecados de pepitas', peso: '500 g', precio: 9.50, destacado: false },
-      { cat: 'Mantecados', nombre: 'Mantecados caseros', peso: '400 g', precio: 12.50, destacado: false },
-      { cat: 'Mantecados', nombre: 'Mantecados de mantequilla', peso: '500 g', precio: 12.50, destacado: false },
-      { cat: 'Mantecados', nombre: 'Mantecados de aceite de oliva y almendras', peso: '500 g', precio: 13.50, destacado: false },
-      { cat: 'Mantecados', nombre: 'Mantecados Bombón crujiente', peso: '500 g', precio: 10.00, destacado: false },
-      { cat: 'Mantecados', nombre: 'Mantecados Bombón (chocolate negro)', peso: '400 g', precio: 10.00, destacado: false },
-      { cat: 'Mantecados', nombre: 'Mantecados Bombón blanco', peso: '500 g', precio: 12.50, destacado: true },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados de canela y ajonjolí', peso: '500 g', precio: 12.50, foto: 'imagenes/productos/mantecados_canela_ajonjoli.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados de chocolate', peso: '500 g', precio: 7.00, foto: 'imagenes/productos/mantecados_chocolate.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados de coco', peso: '500 g', precio: 10.00, foto: 'imagenes/productos/mantecados_coco.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados de limón', peso: '400 g', precio: 12.50, foto: 'imagenes/productos/mantecados_limon.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados de almendra', peso: '500 g', precio: 13.00, foto: 'imagenes/productos/mantecados_almendra.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados de pepitas', peso: '500 g', precio: 12.50, foto: 'imagenes/productos/mantecados_pepitas.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados caseros', peso: '500 g', precio: 13.00, foto: 'imagenes/productos/mantecados_caseros.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados de mantequilla', peso: '500 g', precio: 14.50, foto: 'imagenes/productos/mantecados_mantequilla.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados de aceite de oliva y almendras', peso: '500 g', precio: 13.00, foto: 'imagenes/productos/mantecados_aceite_oliva_almendras.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados Bombón crujiente', peso: '500 g', precio: 12.50, foto: 'imagenes/productos/mantecados_bombon_crujiente.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados Bombón (chocolate negro)', peso: '500 g', precio: 12.50, foto: 'imagenes/productos/mantecados_bombon_negro.webp', destacado: false },
+      { tipo: 'normal', cat: 'Mantecados', nombre: 'Mantecados Bombón blanco', peso: '500 g', precio: 12.50, foto: 'imagenes/productos/mantecados_bombon_blanco.webp', destacado: true },
 
       // SURTIDOS
-      { cat: 'Surtidos', nombre: 'Surtido clásico', peso: '500 g', precio: 20.00, destacado: false },
-      { cat: 'Surtidos', nombre: 'Surtido especial Granada', peso: '500 g', precio: 20.00, destacado: false },
-      { cat: 'Surtidos', nombre: 'Surtido sin gluten y sin lactosa', peso: '450 g', precio: 18.00, destacado: false },
-      { cat: 'Surtidos', nombre: 'Surtido clásico (estuche)', peso: '750 g', precio: 20.00, destacado: false },
-      { cat: 'Surtidos', nombre: 'Surtido clásico (estuche)', peso: '1.600 g', precio: 45.00, destacado: false },
-      { cat: 'Surtidos', nombre: 'Surtido especial Granada (estuche)', peso: '700 g', precio: 23.00, destacado: false },
-      { cat: 'Surtidos', nombre: 'Surtido especial Granada (estuche)', peso: '1.000 g', precio: 29.00, destacado: false },
-      { cat: 'Surtidos', nombre: 'Surtido especial Granada (estuche)', peso: '1.600 g', precio: 45.00, destacado: false },
-      { cat: 'Surtidos', nombre: 'Surtido especial Granada (estuche)', peso: '3.000 g', precio: 69.00, destacado: false },
-      { cat: 'Surtidos', nombre: 'Panera surtido especial', peso: '800 g', precio: 22.50, destacado: false },
-      { cat: 'Surtidos', nombre: 'Bombones surtidos', peso: '500 g', precio: 21.00, destacado: false },
+      {
+        tipo: 'grupo',
+        grupo: 'Surtido clásico',
+        cat: 'Surtidos',
+        foto: 'imagenes/productos/grupo_surtido_clasico.webp',
+        subitems: [
+          { nombre: 'Surtido clásico', peso: '1 kg', precio: 14.00 },
+          { nombre: 'Surtido clásico', peso: '2 kg', precio: 22.50 },
+          { nombre: 'Surtido clásico', peso: '3 kg', precio: 29.50 },
+          { nombre: 'Surtido clásico', peso: '5 kg', precio: 49.00 }
+        ]
+      },
+      {
+        tipo: 'grupo',
+        grupo: 'Surtido especial Granada',
+        cat: 'Surtidos',
+        foto: 'imagenes/productos/grupo_surtido_granada.webp',
+        subitems: [
+          { nombre: 'Surtido especial Granada', peso: '1 kg', precio: 15.00 },
+          { nombre: 'Surtido especial Granada', peso: '2 kg', precio: 24.50 },
+          { nombre: 'Surtido especial Granada', peso: '3 kg', precio: 32.50 },
+          { nombre: 'Surtido especial Granada', peso: '5 kg', precio: 54.00 }
+        ]
+      },
+      { tipo: 'normal', cat: 'Surtidos', nombre: 'Tentación Negra', peso: '450 g', precio: 13.50, foto: 'imagenes/productos/tentacion_negra.webp', destacado: false },
+      { tipo: 'normal', cat: 'Surtidos', nombre: 'Tentación Blanca', peso: '450 g', precio: 13.50, foto: 'imagenes/productos/tentacion_blanca.webp', destacado: false },
+      { tipo: 'normal', cat: 'Surtidos', nombre: 'Panera surtido especial', peso: '1.200 g', precio: 23.00, foto: 'imagenes/productos/panera_surtido_especial.webp', destacado: false },
+      { tipo: 'normal', cat: 'Surtidos', nombre: 'Surtido sin gluten y sin lactosa', peso: '500 g', precio: 16.00, foto: 'imagenes/productos/surtido_sin_gluten_sin_lactosa.webp', destacado: false },
 
       // ROSCOS
-      { cat: 'Roscos', nombre: 'Roscos de vino y almendra', peso: '400 g', precio: 11.00, destacado: false },
-      { cat: 'Roscos', nombre: 'Roscos de almendra sin azúcar', peso: '400 g', precio: 11.00, destacado: false },
-      { cat: 'Roscos', nombre: 'Chocorosco', peso: '500 g', precio: 12.50, destacado: false },
+      { tipo: 'normal', cat: 'Roscos', nombre: 'Roscos de vino y almendra', peso: '500 g', precio: 13.00, foto: 'imagenes/productos/roscos_vino_almendra.webp', destacado: false },
+      { tipo: 'normal', cat: 'Roscos', nombre: 'Chocorosco', peso: '450 g', precio: 12.00, foto: 'imagenes/productos/chocorosco.webp', destacado: false },
+      { tipo: 'normal', cat: 'Roscos', nombre: 'Roscos de almendra sin azúcar', peso: '400 g', precio: 14.50, foto: 'imagenes/productos/roscos_almendra_sin_azucar.webp', destacado: false },
 
       // ESPECIALIDADES
-      { cat: 'Especialidades', nombre: 'Tentación Negra', peso: '400 g', precio: 12.50, destacado: false },
-      { cat: 'Especialidades', nombre: 'Tentación Blanca', peso: '400 g', precio: 12.50, destacado: false },
-      { cat: 'Especialidades', nombre: 'KremyBombóm', peso: '500 g', precio: 13.50, destacado: false },
-      { cat: 'Especialidades', nombre: 'Charitas de almendra', peso: '500 g', precio: 16.00, destacado: false },
-      { cat: 'Especialidades', nombre: 'Pequibom', peso: '400 g', precio: 16.00, destacado: true },
-      { cat: 'Especialidades', nombre: 'Pequibom Dark', peso: '400 g', precio: 16.50, destacado: false },
-      { cat: 'Especialidades', nombre: 'Pequibom Blanco', peso: '400 g', precio: 16.50, destacado: false },
-      { cat: 'Especialidades', nombre: 'Pequibom Surtido', peso: '400 g', precio: 19.45, destacado: false },
-      { cat: 'Especialidades', nombre: 'Trufas', peso: '500 g', precio: 12.50, destacado: false },
-      { cat: 'Especialidades', nombre: 'Bombones de coco', peso: '500 g', precio: 12.50, destacado: false },
-      { cat: 'Especialidades', nombre: 'Galletas chocolateadas', peso: '200 g', precio: 12.50, destacado: false },
-      { cat: 'Especialidades', nombre: 'Nupis Biscuit', peso: '400 g', precio: 12.00, destacado: false },
-      { cat: 'Especialidades', nombre: 'Nupis Biscuit de chocolate negro', peso: '400 g', precio: 12.00, destacado: false },
-      { cat: 'Especialidades', nombre: 'Nupis Blancas', peso: '400 g', precio: 12.00, destacado: false },
+      {
+        tipo: 'grupo',
+        grupo: 'Pequibom',
+        cat: 'Especialidades',
+        foto: 'imagenes/productos/grupo_pequibom.webp',
+        subitems: [
+          { nombre: 'Pequibom', peso: '400 g', precio: 16.00, destacado: true },
+          { nombre: 'Pequibom Dark', peso: '400 g', precio: 16.00 },
+          { nombre: 'Pequibom Blanco', peso: '400 g', precio: 16.00 },
+          { nombre: 'Pequibom Surtido', peso: '400 g', precio: 16.00 }
+        ]
+      },
+      { tipo: 'normal', cat: 'Especialidades', nombre: 'Trufas', peso: '450 g', precio: 12.50, foto: 'imagenes/productos/trufas.webp', destacado: false },
+      { tipo: 'normal', cat: 'Especialidades', nombre: 'Bombones de coco', peso: '450 g', precio: 12.50, foto: 'imagenes/productos/bombones_coco.webp', destacado: false },
+      { tipo: 'normal', cat: 'Especialidades', nombre: 'Galletas chocolateadas', peso: '400 g', precio: 12.00, foto: 'imagenes/productos/galletas_chocolateadas.webp', destacado: false },
+      {
+        tipo: 'grupo',
+        grupo: 'Nupis Biscuit',
+        cat: 'Especialidades',
+        foto: 'imagenes/productos/grupo_nupis_biscuit.webp',
+        subitems: [
+          { nombre: 'Nupis Biscuit', peso: '400 g', precio: 14.50 },
+          { nombre: 'Nupis Biscuit Surtidas', peso: '400 g', precio: 14.50 }
+        ]
+      },
+      { tipo: 'normal', cat: 'Especialidades', nombre: 'Nupis Blancas', peso: '400 g', precio: 14.50, foto: 'imagenes/productos/nupis_blancas.webp', destacado: false },
+      { tipo: 'normal', cat: 'Especialidades', nombre: 'Charitas de almendra', peso: '500 g', precio: 13.50, foto: 'imagenes/productos/charitas_almendra.webp', destacado: false },
+      { tipo: 'normal', cat: 'Especialidades', nombre: 'KremyBombóm', peso: '400 g', precio: 14.00, foto: 'imagenes/productos/kremybombom.webp', destacado: false },
 
       // POLVORONES Y RELLENOS
-      { cat: 'Polvorones y rellenos', nombre: 'Polvorón de almendra moño', peso: '500 g', precio: 11.20, destacado: false },
-      { cat: 'Polvorones y rellenos', nombre: 'Polvorón moño', peso: '500 g', precio: 10.20, destacado: false },
-      { cat: 'Polvorones y rellenos', nombre: 'Polvorón relleno de cacao', peso: '500 g', precio: 11.20, destacado: false },
-      { cat: 'Polvorones y rellenos', nombre: 'Nubes de pistacho', peso: '400 g', precio: 7.00, destacado: false },
+      {
+        tipo: 'grupo',
+        grupo: 'Polvorones tradicionales',
+        cat: 'Polvorones y rellenos',
+        foto: 'imagenes/productos/grupo_polvorones_tradicionales.webp',
+        subitems: [
+          { nombre: 'Polvorón de almendra moño', peso: '500 g', precio: 13.50 },
+          { nombre: 'Polvorón moño', peso: '500 g', precio: 12.50 }
+        ]
+      },
+      { tipo: 'normal', cat: 'Polvorones y rellenos', nombre: 'Polvorón relleno de cacao', peso: '400 g', precio: 12.50, foto: 'imagenes/productos/polvoron_relleno_cacao.webp', destacado: false },
+      { tipo: 'normal', cat: 'Polvorones y rellenos', nombre: 'Nubes de pistacho', peso: '400 g', precio: 16.50, foto: 'imagenes/productos/nubes_pistacho.webp', destacado: false },
 
       // SIN AZÚCAR
-      { cat: 'Sin azúcar', nombre: 'Mantecados caseros sin azúcar', peso: '500 g', precio: 14.50, destacado: true },
-      { cat: 'Sin azúcar', nombre: 'Surtido 9 sabores sin azúcar', peso: '500 g', precio: 11.50, destacado: false },
-      { cat: 'Sin azúcar', nombre: 'Hojaldre especial sin azúcar', peso: '400 g', precio: 14.00, destacado: false },
-      { cat: 'Sin azúcar', nombre: 'Mazapán Soto sin azúcar', peso: '500 g', precio: 18.50, destacado: false },
-      { cat: 'Sin azúcar', nombre: 'Mantecado de almendra sin azúcar', peso: '500 g', precio: 10.66, destacado: false },
-      { cat: 'Sin azúcar', nombre: 'Mantecados de aceite y almendra sin azúcar', peso: '500 g', precio: 11.50, destacado: false },
+      {
+        tipo: 'grupo',
+        grupo: 'Productos sin azúcar',
+        cat: 'Sin azúcar',
+        foto: 'imagenes/productos/grupo_sin_azucar.webp',
+        subitems: [
+          { nombre: 'Mantecados caseros sin azúcar', peso: '500 g', precio: 14.50, destacado: true },
+          { nombre: 'Mantecados de aceite y almendra sin azúcar', peso: '500 g', precio: 14.50 },
+          { nombre: 'Mantecados de almendra sin azúcar', peso: '500 g', precio: 14.50 },
+          { nombre: 'Surtido 9 sabores sin azúcar', peso: '500 g', precio: 14.50 },
+          { nombre: 'Mazapán de Soto sin azúcar', peso: '350 g', precio: 14.50 },
+          { nombre: 'Hojaldre especial sin azúcar', peso: '400 g', precio: 14.50 }
+        ]
+      },
 
       // HOJALDRES
-      { cat: 'Hojaldres', nombre: 'Hojaldre especial', peso: '400 g', precio: 10.00, destacado: false },
-      { cat: 'Hojaldres', nombre: 'Hojaldres surtidos de crema', peso: '500 g', precio: 12.00, destacado: false },
-      { cat: 'Hojaldres', nombre: 'Hojaldres surtidos de cabello de ángel', peso: '500 g', precio: 12.00, destacado: false },
-      { cat: 'Hojaldres', nombre: 'Hojaldres surtidos de chocolate', peso: '500 g', precio: 12.00, destacado: false },
-      { cat: 'Hojaldres', nombre: 'Hojaldres surtidos (variados)', peso: '500 g', precio: 12.00, destacado: false },
+      { tipo: 'normal', cat: 'Hojaldres', nombre: 'Hojaldre especial', peso: '500 g', precio: 13.00, foto: 'imagenes/productos/hojaldre_especial.webp', destacado: false },
+      {
+        tipo: 'grupo',
+        grupo: 'Hojaldres surtidos',
+        cat: 'Hojaldres',
+        foto: 'imagenes/productos/grupo_hojaldres_surtidos.webp',
+        subitems: [
+          { nombre: 'Hojaldres surtidos', peso: '500 g', precio: 12.50 },
+          { nombre: 'Hojaldres surtidos', peso: '1 kg', precio: 22.00 }
+        ]
+      },
+      { tipo: 'normal', cat: 'Hojaldres', nombre: 'Bombones surtidos', peso: '400 g', precio: 12.50, foto: 'imagenes/productos/bombones_surtidos.webp', destacado: false },
 
       // ALFAJORES, MAZAPANES Y TURRONES
-      { cat: 'Alfajores, mazapanes y turrones', nombre: 'Alfajores de almendra', peso: '500 g', precio: 10.00, destacado: false },
-      { cat: 'Alfajores, mazapanes y turrones', nombre: 'Alfajores de la Tita Pepa', peso: '500 g', precio: 21.00, destacado: false },
-      { cat: 'Alfajores, mazapanes y turrones', nombre: 'Mazapán de Soto', peso: '500 g', precio: 18.00, destacado: false },
-      { cat: 'Alfajores, mazapanes y turrones', nombre: 'Figuritas de mazapán', peso: '500 g', precio: 21.00, destacado: false },
-      { cat: 'Alfajores, mazapanes y turrones', nombre: 'Piñonate', peso: '300 g', precio: 30.00, destacado: false },
-      { cat: 'Alfajores, mazapanes y turrones', nombre: 'Chocoalmendra', peso: '500 g', precio: 20.50, destacado: false },
-      { cat: 'Alfajores, mazapanes y turrones', nombre: 'Huesitos de Santo', peso: '500 g', precio: 18.50, destacado: false },
-      { cat: 'Alfajores, mazapanes y turrones', nombre: 'Turroncillo duro', peso: '300 g', precio: 15.00, destacado: false },
-      { cat: 'Alfajores, mazapanes y turrones', nombre: 'Turroncillo blando', peso: '300 g', precio: 15.00, destacado: false },
-      { cat: 'Alfajores, mazapanes y turrones', nombre: 'Turrón surtido', peso: '500 g', precio: 21.00, destacado: false },
-      { cat: 'Alfajores, mazapanes y turrones', nombre: 'Turronchoc', peso: '300 g', precio: 15.00, destacado: false },
-      { cat: 'Alfajores, mazapanes y turrones', nombre: 'Guirlache de almendra', peso: '300 g', precio: 15.00, destacado: false },
+      { tipo: 'normal', cat: 'Alfajores, mazapanes y turrones', nombre: 'Alfajores de almendra', peso: '500 g', precio: 14.00, foto: 'imagenes/productos/alfajores_almendra.webp', destacado: false },
+      { tipo: 'normal', cat: 'Alfajores, mazapanes y turrones', nombre: 'Alfajores de la Tita Pepa', peso: '450 g', precio: 14.00, foto: 'imagenes/productos/alfajores_tita_pepa.webp', destacado: false },
+      { tipo: 'normal', cat: 'Alfajores, mazapanes y turrones', nombre: 'Mazapán de Soto', peso: '400 g', precio: 14.00, foto: 'imagenes/productos/mazapan_soto.webp', destacado: false },
+      { tipo: 'normal', cat: 'Alfajores, mazapanes y turrones', nombre: 'Figuritas de mazapán', peso: '400 g', precio: 14.00, foto: 'imagenes/productos/figuritas_mazapan.webp', destacado: false },
+      { tipo: 'normal', cat: 'Alfajores, mazapanes y turrones', nombre: 'Piñonate', peso: '400 g', precio: 14.00, foto: 'imagenes/productos/pinonate.webp', destacado: false },
+      { tipo: 'normal', cat: 'Alfajores, mazapanes y turrones', nombre: 'Chocoalmendra', peso: '400 g', precio: 14.00, foto: 'imagenes/productos/chocoalmendra.webp', destacado: false },
+      { tipo: 'normal', cat: 'Alfajores, mazapanes y turrones', nombre: 'Huesitos de Santo', peso: '400 g', precio: 14.00, foto: 'imagenes/productos/huesitos_santo.webp', destacado: false },
+      {
+        tipo: 'grupo',
+        grupo: 'Turrones',
+        cat: 'Alfajores, mazapanes y turrones',
+        foto: 'imagenes/productos/grupo_turrones.webp',
+        subitems: [
+          { nombre: 'Turroncillo duro', peso: '400 g', precio: 14.00 },
+          { nombre: 'Turroncillo blando', peso: '400 g', precio: 14.00 },
+          { nombre: 'Turrón de chocolate crujiente', peso: '400 g', precio: 14.00 },
+          { nombre: 'Turrón de chocolate blanco', peso: '400 g', precio: 14.00 },
+          { nombre: 'Turrón guirlache', peso: '400 g', precio: 14.00 },
+          { nombre: 'Turrón de nata-nuez', peso: '400 g', precio: 14.00 },
+          { nombre: 'Turrón de praliné', peso: '400 g', precio: 14.00 },
+          { nombre: 'Turrón surtido', peso: '400 g', precio: 14.00 }
+        ]
+      },
 
       // ALMENDRITAS RELLENAS
-      { cat: 'Almendritas rellenas', nombre: 'Almendritas de cacahuete', peso: '500 g', precio: 15.00, destacado: false },
-      { cat: 'Almendritas rellenas', nombre: 'Almendritas de almendra', peso: '500 g', precio: 15.00, destacado: false },
-      { cat: 'Almendritas rellenas', nombre: 'Almendritas de chocolate', peso: '500 g', precio: 15.00, destacado: false }
+      {
+        tipo: 'grupo',
+        grupo: 'Almendritas rellenas',
+        cat: 'Almendritas rellenas',
+        foto: 'imagenes/productos/grupo_almendritas_rellenas.webp',
+        subitems: [
+          { nombre: 'Almendritas rellenas de turrón', peso: '400 g', precio: 14.00 },
+          { nombre: 'Almendritas rellenas de cacahuete', peso: '400 g', precio: 14.00 },
+          { nombre: 'Almendritas rellenas de chocolate', peso: '400 g', precio: 14.00 },
+          { nombre: 'Almendritas rellenas de crema', peso: '400 g', precio: 14.00 }
+        ]
+      },
+
+      // CAJAS Y REGALOS (1 a 34 exactas)
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'SURTIDO ESPECIAL AZUL', peso: '1.600 g', precio: 24.20, foto: 'imagenes/productos/caja_1.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'PEQUIBOM', peso: '500 g', precio: 22.80, foto: 'imagenes/productos/caja_2.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'MANTECADOS CASEROS', peso: '600 g', precio: 16.50, foto: 'imagenes/productos/caja_3.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'MANTECADOS DE CANELA Y AJONJOLÍ', peso: '600 g', precio: 16.50, foto: 'imagenes/productos/caja_4.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'MANTECADOS DE LIMÓN', peso: '400 g', precio: 15.60, foto: 'imagenes/productos/caja_5.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'MANTECADOS BOMBÓN', peso: '850 g', precio: 22.50, foto: 'imagenes/productos/caja_6.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'HOJALDRES SURTIDOS', peso: '700 g', precio: 17.50, foto: 'imagenes/productos/caja_7.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'KREMYBOMBÓM', peso: '450 g', precio: 15.90, foto: 'imagenes/productos/caja_8.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'BOMBONES SURTIDOS', peso: '450 g', precio: 15.90, foto: 'imagenes/productos/caja_9.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'BOMBONES DE COCO', peso: '500 g', precio: 14.50, foto: 'imagenes/productos/caja_10.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'SURTIDO DE CHOCOLATES', peso: '500 g', precio: 17.50, foto: 'imagenes/productos/caja_11.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'PEQUIBOM SURTIDO', peso: '300 g', precio: 14.50, foto: 'imagenes/productos/caja_12.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'SURTIDO ESPECIAL AZUL GOLD', peso: '2.000 g', precio: 28.90, foto: 'imagenes/productos/caja_13.webp', destacado: true },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'CESTA MANTECADOS CASEROS', peso: '1.000 g', precio: 23.50, foto: 'imagenes/productos/caja_14.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'DELICIOSAS CHARITAS DE ALMENDRA', peso: '500 g', precio: 14.50, foto: 'imagenes/productos/caja_15.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'GALLETAS CHOCOLATEADAS', peso: '250 g', precio: 13.90, foto: 'imagenes/productos/caja_16.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'BOTE NUPIS BISCUIT BLANCA', peso: '275 g', precio: 13.50, foto: 'imagenes/productos/caja_17.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'MANTECADOS DE ACEITE DE OLIVA VIRGEN EXTRA Y ALMENDRAS', peso: '600 g', precio: 16.50, foto: 'imagenes/productos/caja_18.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'SURTIDO SIN AZÚCAR', peso: '550 g', precio: 17.50, foto: 'imagenes/productos/caja_19.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'ALMENDRITAS RELLENAS SURTIDAS', peso: '700 g', precio: 17.50, foto: 'imagenes/productos/caja_20.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'SURTIDO SIN GLUTEN Y SIN LACTOSA', peso: '400 g', precio: 16.25, foto: 'imagenes/productos/caja_21.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'SURTIDO ESPECIAL POLVORONES', peso: '550 g', precio: 17.50, foto: 'imagenes/productos/caja_22.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'SURTIDO DE MAZAPANES', peso: '450 g', precio: 18.50, foto: 'imagenes/productos/caja_23.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'ROSCOS DE VINO', peso: '250 g', precio: 12.50, foto: 'imagenes/productos/caja_24.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'TENTACIÓN BLANCA', peso: '475 g', precio: 16.50, foto: 'imagenes/productos/caja_25.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'TENTACIÓN NEGRA', peso: '475 g', precio: 16.50, foto: 'imagenes/productos/caja_26.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'FAROLILLO POLVORONES RELLENOS DE CACAO', peso: '400 g', precio: 16.50, foto: 'imagenes/productos/caja_27.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'LATA CHOCOROSCOS SURTIDOS', peso: '500 g', precio: 18.50, foto: 'imagenes/productos/caja_28.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'LATA POLVORÓN TRADICIONAL MOÑO', peso: '350 g', precio: 16.50, foto: 'imagenes/productos/caja_29.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'LATA SURTIDO DE NAVIDAD', peso: '600 g', precio: 22.50, foto: 'imagenes/productos/caja_30.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'LATA LA DESPENSA DE EL PATRIARCA', peso: '400 g', precio: 17.50, foto: 'imagenes/productos/caja_31.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'NUBES DE PISTACHO', peso: '1.000 g', precio: 34.50, foto: 'imagenes/productos/caja_32.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'LATA GRAN RESERVA', peso: '2.100 g', precio: 52.50, foto: 'imagenes/productos/caja_33.webp', destacado: false },
+      { tipo: 'normal', cat: 'Cajas y regalos', nombre: 'LOTE SELECCIÓN', peso: '3.950 g', precio: 70.50, foto: 'imagenes/productos/caja_34.webp', destacado: false }
     ];
 
     let categoriaActual = 'Todos';
-    let carrito = [];
+    let carrito = []; // Formato de cada item: { nombre, peso, precio, cantidad }
+    let cantidadesGrupos = {}; // Key: "nombre|peso" -> cantidad
 
     function formatearEuros(valor) {
-      return valor.toFixed(2).replace('.', ',') + ' €';
-    }
-
-    function toggleMenu() {
-      const drawer = document.getElementById('mobile-drawer');
-      const content = document.getElementById('drawer-content');
-      if (drawer.classList.contains('opacity-0')) {
-        drawer.classList.remove('opacity-0', 'pointer-events-none');
-        content.classList.remove('-translate-x-full');
-      } else {
-        drawer.classList.add('opacity-0', 'pointer-events-none');
-        content.classList.add('-translate-x-full');
-      }
+      return Number(valor).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
     }
 
     function mostrarToast(mensaje) {
-      const toast = document.getElementById('toast-notification');
-      const msg = document.getElementById('toast-message');
-      msg.innerText = mensaje;
-      toast.classList.remove('translate-x-full', 'opacity-0', 'pointer-events-none');
-      
+      const toast = document.getElementById('toast-notificacion');
+      const texto = document.getElementById('toast-texto');
+      if (!toast || !texto) return;
+      texto.innerText = mensaje;
+      toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
       setTimeout(() => {
-        toast.classList.add('translate-x-full', 'opacity-0', 'pointer-events-none');
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
       }, 3000);
     }
 
-    // Renderizar catálogo solo texto
+    function getCantGrupo(key) {
+      return cantidadesGrupos[key] || 1;
+    }
+
+    function modificarCantGrupo(key, delta) {
+      const actual = cantidadesGrupos[key] || 1;
+      const nuevo = Math.max(1, actual + delta);
+      cantidadesGrupos[key] = nuevo;
+      const el = document.getElementById('cant-grupo-' + key.replace(/[^a-zA-Z0-9]/g, '_'));
+      if (el) el.innerText = nuevo;
+    }
+
+    // Renderizar catálogo con tarjetas normales y de grupo
     function renderizarCatalogo(productos) {
       const contenedor = document.getElementById('lista-productos-catalogo');
       if (!contenedor) return;
@@ -796,65 +1515,178 @@
         return;
       }
 
-      contenedor.innerHTML = productos.map(prod => `
-        <article class="relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-card-hover transition-all duration-300 border border-gold/40 flex flex-col justify-between group">
-          <!-- Adorno Navideño Sutil en Esquina -->
-          <div class="absolute top-4 right-4 text-gold/60 select-none">
-            <span class="material-symbols-outlined text-[18px]">star</span>
-          </div>
+      contenedor.innerHTML = productos.map(prod => {
+        if (prod.tipo === 'grupo') {
+          // Tarjeta de Grupo: ocupa todo el ancho
+          const subitemsVisibles = prod.subitemsFiltrados || prod.subitems;
+          if (subitemsVisibles.length === 0) return '';
 
-          <div class="flex flex-col gap-3">
-            <!-- Etiqueta de Categoría en Dorado -->
-            <div class="flex items-center">
-              <span class="px-2.5 py-1 rounded-md bg-gold/15 text-gold-dark text-[11px] font-bold uppercase tracking-wider border border-gold/30">${prod.cat}</span>
+          const filasHtml = subitemsVisibles.map(sub => {
+            const key = sub.nombre + '|' + sub.peso;
+            const cantId = 'cant-grupo-' + key.replace(/[^a-zA-Z0-9]/g, '_');
+            const cant = getCantGrupo(key);
+
+            return `
+              <div class="min-h-[48px] py-2.5 px-3 rounded-xl bg-surface-container-lowest border border-outline/15 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-gold/40 transition-colors">
+                <div class="flex items-center gap-2.5 flex-1 min-w-0">
+                  <span class="font-serif font-bold text-primary text-sm sm:text-base truncate">${sub.nombre}</span>
+                  <span class="px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-xs font-semibold shrink-0">${sub.peso}</span>
+                </div>
+
+                <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0">
+                  <span class="font-sans font-bold text-primary text-base sm:text-lg min-w-[75px] text-right">${formatearEuros(sub.precio)}</span>
+
+                  <!-- Selector de cantidad -->
+                  <div class="flex items-center gap-1.5 bg-surface-container rounded-lg p-1">
+                    <button type="button" onclick="modificarCantGrupo('${sub.nombre.replace(/'/g, "\'")}|${sub.peso}', -1)" aria-label="Restar unidad" class="w-7 h-7 rounded bg-white text-on-surface hover:bg-surface-container-high flex items-center justify-center font-bold text-xs active:scale-95 transition-all shadow-xs">
+                      <span class="material-symbols-outlined text-[14px]">remove</span>
+                    </button>
+                    <span id="${cantId}" class="w-6 text-center font-bold text-xs font-sans">${cant}</span>
+                    <button type="button" onclick="modificarCantGrupo('${sub.nombre.replace(/'/g, "\'")}|${sub.peso}', 1)" aria-label="Sumar unidad" class="w-7 h-7 rounded bg-white text-on-surface hover:bg-surface-container-high flex items-center justify-center font-bold text-xs active:scale-95 transition-all shadow-xs">
+                      <span class="material-symbols-outlined text-[14px]">add</span>
+                    </button>
+                  </div>
+
+                  <!-- Botón Añadir -->
+                  <button 
+                    onclick="agregarAlPedidoConCantidad('${sub.nombre.replace(/'/g, "\'")}', '${sub.peso}', ${sub.precio}, '${key.replace(/'/g, "\'")}')"
+                    class="h-9 px-3 rounded-lg bg-primary text-on-primary font-bold text-xs flex items-center justify-center gap-1 hover:bg-primary-container active:scale-95 transition-all shadow-sm">
+                    <span class="material-symbols-outlined text-[15px]">add_shopping_cart</span>
+                    <span class="hidden md:inline">Añadir</span>
+                  </button>
+
+                  <!-- Icono WhatsApp -->
+                  <a 
+                    href="https://wa.me/34644173089?text=${encodeURIComponent('Hola Julia, me gustaría consultar detalles sobre ' + sub.nombre + ' (' + sub.peso + ') por ' + formatearEuros(sub.precio))}" 
+                    target="_blank"
+                    aria-label="Consultar por WhatsApp"
+                    class="w-9 h-9 rounded-lg bg-surface-container hover:bg-surface-container-high text-[#25D366] flex items-center justify-center active:scale-95 transition-all border border-outline/20">
+                    <span class="material-symbols-outlined text-[18px]">chat</span>
+                  </a>
+                </div>
+              </div>
+            `;
+          }).join('');
+
+          return `
+            <article class="col-span-full bg-white rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-card-hover transition-all duration-300 border border-gold/40 flex flex-col gap-5">
+              <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+                <div class="md:col-span-4 w-full aspect-[4/3] rounded-xl overflow-hidden bg-amber-50/50 flex items-center justify-center border border-gold/20 p-2">
+                  <img src="${prod.foto}" alt="${prod.grupo}" loading="lazy" class="w-full h-full object-contain hover:scale-105 transition-transform duration-300" />
+                </div>
+                <div class="md:col-span-8 flex flex-col gap-3">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-1 rounded-md bg-gold/15 text-gold-dark text-[11px] font-bold uppercase tracking-wider border border-gold/30">${prod.cat}</span>
+                    <span class="px-2.5 py-1 rounded-md bg-primary/10 text-primary text-[11px] font-bold uppercase tracking-wider border border-primary/20">Colección</span>
+                  </div>
+                  <h3 class="font-serif text-2xl md:text-3xl font-bold text-primary">${prod.grupo}</h3>
+                  <div class="flex flex-col gap-2 pt-1">
+                    ${filasHtml}
+                  </div>
+                </div>
+              </div>
+            </article>
+          `;
+        }
+
+        // Tarjeta normal
+        return `
+          <article class="relative bg-white rounded-2xl p-5 shadow-sm hover:shadow-card-hover transition-all duration-300 border border-gold/40 flex flex-col justify-between group">
+            <div class="absolute top-4 right-4 z-10 text-gold/60 select-none">
+              <span class="material-symbols-outlined text-[18px]">star</span>
             </div>
 
-            <!-- Nombre del Producto en Serif grande y Rojo Oscuro -->
-            <h3 class="font-serif text-xl font-bold text-primary mt-1 leading-snug">${prod.nombre}</h3>
-            
-            <!-- Peso tipo Chip y Precio grande en Rojo Oscuro -->
-            <div class="flex items-center gap-3">
-              <span class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant text-xs font-semibold">${prod.peso}</span>
-              <span class="font-sans text-2xl font-bold text-primary">${formatearEuros(prod.precio)}</span>
-            </div>
-          </div>
+            <div class="flex flex-col gap-3">
+              <!-- Fotografía 4:3 con fondo crema -->
+              <div class="w-full aspect-[4/3] rounded-xl overflow-hidden bg-amber-50/50 flex items-center justify-center border border-gold/20 p-2">
+                <img src="${prod.foto}" alt="${prod.nombre}" loading="lazy" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
+              </div>
 
-          <!-- Botones «Añadir al pedido» y «Consultar por WhatsApp» -->
-          <div class="flex flex-col gap-2 pt-4 mt-3 border-t border-surface-container">
-            <button 
-              onclick="agregarAlPedido('${prod.nombre.replace(/'/g, "\\'")}', '${prod.peso}', ${prod.precio})"
-              class="w-full h-11 rounded-xl bg-primary text-on-primary font-bold text-xs flex items-center justify-center gap-1.5 hover:bg-primary-container active:scale-95 transition-all shadow-sm">
-              <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
-              <span>Añadir al pedido</span>
-            </button>
-            <a 
-              href="https://wa.me/34644173089?text=${encodeURIComponent('Hola Julia, me gustaría consultar detalles sobre ' + prod.nombre + ' (' + prod.peso + ') por ' + formatearEuros(prod.precio))}" 
-              target="_blank"
-              class="w-full h-11 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all border border-outline/20">
-              <span class="material-symbols-outlined text-[16px] text-[#25D366]">chat</span>
-              <span>Consultar por WhatsApp</span>
-            </a>
-          </div>
-        </article>
-      `).join('');
+              <!-- Etiqueta de Categoría en Dorado -->
+              <div class="flex items-center">
+                <span class="px-2.5 py-1 rounded-md bg-gold/15 text-gold-dark text-[11px] font-bold uppercase tracking-wider border border-gold/30">${prod.cat}</span>
+              </div>
+
+              <!-- Nombre del Producto en Serif grande y Rojo Oscuro -->
+              <h3 class="font-serif text-xl font-bold text-primary mt-1 leading-snug">${prod.nombre}</h3>
+              
+              <!-- Peso tipo Chip y Precio grande en Rojo Oscuro -->
+              <div class="flex items-center gap-3">
+                <span class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant text-xs font-semibold">${prod.peso}</span>
+                <span class="font-sans text-2xl font-bold text-primary">${formatearEuros(prod.precio)}</span>
+              </div>
+            </div>
+
+            <!-- Botones «Añadir al pedido» y «Consultar por WhatsApp» -->
+            <div class="flex flex-col gap-2 pt-4 mt-3 border-t border-surface-container">
+              <button 
+                onclick="agregarAlPedido('${prod.nombre.replace(/'/g, "\'")}', '${prod.peso}', ${prod.precio})"
+                class="w-full h-11 rounded-xl bg-primary text-on-primary font-bold text-xs flex items-center justify-center gap-1.5 hover:bg-primary-container active:scale-95 transition-all shadow-sm">
+                <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+                <span>Añadir al pedido</span>
+              </button>
+              <a 
+                href="https://wa.me/34644173089?text=${encodeURIComponent('Hola Julia, me gustaría consultar detalles sobre ' + prod.nombre + ' (' + prod.peso + ') por ' + formatearEuros(prod.precio))}" 
+                target="_blank"
+                class="w-full h-11 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all border border-outline/20">
+                <span class="material-symbols-outlined text-[16px] text-[#25D366]">chat</span>
+                <span>Consultar por WhatsApp</span>
+              </a>
+            </div>
+          </article>
+        `;
+      }).join('');
     }
 
     function filtrarProductos() {
       const texto = (document.getElementById('buscador-productos')?.value || '').toLowerCase().trim();
       const orden = document.getElementById('selector-orden')?.value || 'predeterminado';
 
-      let filtrados = catalogoProductos.filter(item => {
+      let filtrados = [];
+
+      catalogoProductos.forEach(item => {
         const coincideCat = (categoriaActual === 'Todos' || item.cat === categoriaActual);
-        const coincideTexto = item.nombre.toLowerCase().includes(texto) || item.cat.toLowerCase().includes(texto);
-        return coincideCat && coincideTexto;
+        if (!coincideCat) return;
+
+        if (item.tipo === 'grupo') {
+          // Filtrar subitems del grupo
+          let subitemsMatching = item.subitems.filter(sub => {
+            if (!texto) return true;
+            return sub.nombre.toLowerCase().includes(texto) || item.grupo.toLowerCase().includes(texto) || item.cat.toLowerCase().includes(texto);
+          });
+
+          if (subitemsMatching.length > 0) {
+            filtrados.push({
+              ...item,
+              subitemsFiltrados: subitemsMatching
+            });
+          }
+        } else {
+          const coincideTexto = !texto || item.nombre.toLowerCase().includes(texto) || item.cat.toLowerCase().includes(texto);
+          if (coincideTexto) {
+            filtrados.push(item);
+          }
+        }
       });
 
       if (orden === 'precio-asc') {
-        filtrados.sort((a, b) => a.precio - b.precio);
+        filtrados.sort((a, b) => {
+          const pA = a.tipo === 'grupo' ? Math.min(...a.subitems.map(s => s.precio)) : a.precio;
+          const pB = b.tipo === 'grupo' ? Math.min(...b.subitems.map(s => s.precio)) : b.precio;
+          return pA - pB;
+        });
       } else if (orden === 'precio-desc') {
-        filtrados.sort((a, b) => b.precio - a.precio);
+        filtrados.sort((a, b) => {
+          const pA = a.tipo === 'grupo' ? Math.max(...a.subitems.map(s => s.precio)) : a.precio;
+          const pB = b.tipo === 'grupo' ? Math.max(...b.subitems.map(s => s.precio)) : b.precio;
+          return pB - pA;
+        });
       } else if (orden === 'nombre') {
-        filtrados.sort((a, b) => a.nombre.localeCompare(b.nombre));
+        filtrados.sort((a, b) => {
+          const nA = a.tipo === 'grupo' ? a.grupo : a.nombre;
+          const nB = b.tipo === 'grupo' ? b.grupo : b.nombre;
+          return nA.localeCompare(nB);
+        });
       }
 
       renderizarCatalogo(filtrados);
@@ -881,6 +1713,23 @@
       }
       actualizarVistaResumen();
       mostrarToast(`${nombre} (${peso}) añadido a tu pedido.`);
+    }
+
+    function agregarAlPedidoConCantidad(nombre, peso, precio, key) {
+      const cant = getCantGrupo(key);
+      const index = carrito.findIndex(i => i.nombre === nombre && i.peso === peso);
+      if (index > -1) {
+        carrito[index].cantidad += cant;
+      } else {
+        carrito.push({ nombre, peso, precio, cantidad: cant });
+      }
+      // Reset group counter to 1
+      cantidadesGrupos[key] = 1;
+      const el = document.getElementById('cant-grupo-' + key.replace(/[^a-zA-Z0-9]/g, '_'));
+      if (el) el.innerText = 1;
+
+      actualizarVistaResumen();
+      mostrarToast(`${cant} × ${nombre} (${peso}) añadido a tu pedido.`);
     }
 
     function cambiarCantidad(index, delta) {
@@ -965,22 +1814,30 @@
       const comentarios = document.getElementById('pedido-comentarios')?.value.trim() || '';
 
       let total = 0;
-      let mensaje = `Hola Julia, quiero hacer este pedido:\n\n`;
+      let mensaje = `Hola Julia, quiero hacer este pedido:
 
-      carrito.forEach((item, index) => {
+`;
+
+      carrito.forEach((item) => {
         const sub = item.precio * item.cantidad;
         total += sub;
-        mensaje += `${item.cantidad} × ${item.nombre} (${item.peso}) - ${formatearEuros(sub)}\n`;
+        mensaje += `${item.cantidad} × ${item.nombre} (${item.peso}) - ${formatearEuros(sub)}
+`;
       });
 
-      mensaje += `\nTotal: ${formatearEuros(total)}\n`;
+      mensaje += `
+Total: ${formatearEuros(total)}
+`;
       if (nombre && nombre !== 'No especificado') {
-        mensaje += `Nombre: ${nombre}\n`;
+        mensaje += `Nombre: ${nombre}
+`;
       }
       if (comentarios) {
-        mensaje += `Comentarios: ${comentarios}\n`;
+        mensaje += `Comentarios: ${comentarios}
+`;
       }
-      mensaje += `\n¿Cuándo y dónde podemos quedar?`;
+      mensaje += `
+¿Cuándo y dónde podemos quedar?`;
 
       const url = `https://wa.me/34644173089?text=${encodeURIComponent(mensaje)}`;
       window.open(url, '_blank');
